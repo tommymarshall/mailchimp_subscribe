@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once PATH_THIRD.'vl_subscribe/includes/MailChimp.class.php';
+require_once PATH_THIRD.'mailchimp_subscribe/includes/MailChimp.class.php';
 
 /**
  * vl_recommend Extension Control Panel File
@@ -12,16 +12,16 @@ require_once PATH_THIRD.'vl_subscribe/includes/MailChimp.class.php';
 
 class Vl_subscribe_ext {
 
-	public $name             = 'VL Subscribe';
-	public $version          = '1.0.3';
+	public $name             = 'Mailchimp Subscribe';
+	public $version          = '1.0.0';
 	public $description      = 'Subscribes newly created user to Mailchimp specified newsletter.';
 	public $docs_url         = '';
 	public $settings_exist   = 'y';
-	public $package          = 'vl_subscribe';
+	public $package          = 'mailchimp_subscribe';
 	public $settings         = array();
 	public $settings_default = array(
-		'vl_subscribe_api_key' => '',
-		'vl_subscribe_list_id' => '',
+		'mailchimp_subscribe_api_key' => '',
+		'mailchimp_subscribe_list_id' => '',
 	);
 
 	protected $_ee;
@@ -38,12 +38,12 @@ class Vl_subscribe_ext {
 	{
 		$config_items = array();
 
-		if ($this->_ee->config->item('vl_subscribe_api_key')) {
-			$config_items['vl_subscribe_api_key'] = $this->_ee->config->item('vl_subscribe_api_key');
+		if ($this->_ee->config->item('mailchimp_subscribe_api_key')) {
+			$config_items['mailchimp_subscribe_api_key'] = $this->_ee->config->item('mailchimp_subscribe_api_key');
 		}
 
-		if ($this->_ee->config->item('vl_subscribe_list_id')) {
-			$config_items['vl_subscribe_list_id'] = $this->_ee->config->item('vl_subscribe_list_id');
+		if ($this->_ee->config->item('mailchimp_subscribe_list_id')) {
+			$config_items['mailchimp_subscribe_list_id'] = $this->_ee->config->item('mailchimp_subscribe_list_id');
 		}
 
 		return array_merge($settings, $config_items);
@@ -52,8 +52,8 @@ class Vl_subscribe_ext {
 	public function settings()
 	{
 		return array(
-			'vl_subscribe_api_key' => $this->settings_default['vl_subscribe_api_key'],
-			'vl_subscribe_list_id' => $this->settings_default['vl_subscribe_list_id'],
+			'mailchimp_subscribe_api_key' => $this->settings_default['mailchimp_subscribe_api_key'],
+			'mailchimp_subscribe_list_id' => $this->settings_default['mailchimp_subscribe_list_id'],
 		);
 	}
 
@@ -120,14 +120,14 @@ class Vl_subscribe_ext {
 
 	public function userCanSubscribe()
 	{
-		if (strlen($this->settings['vl_subscribe_api_key']) === 0)
+		if (strlen($this->settings['mailchimp_subscribe_api_key']) === 0)
 		{
 			$errors[] = "There is no API API key.";
 		}
 
-		if (strlen($this->settings['vl_subscribe_list_id']) === 0)
+		if (strlen($this->settings['mailchimp_subscribe_list_id']) === 0)
 		{
-			$errors[] = "Error adding email {{$user_data['email']}} to list ID {{$this->settings['vl_subscribe_list_id']}} using {{$this->settings['vl_subscribe_api_key']}} as an API key.";
+			$errors[] = "Error adding email {{$user_data['email']}} to list ID {{$this->settings['mailchimp_subscribe_list_id']}} using {{$this->settings['mailchimp_subscribe_api_key']}} as an API key.";
 		}
 
 		if ($errors)
@@ -144,10 +144,10 @@ class Vl_subscribe_ext {
 
 	public function subscribe_user_to_list($user_data = array())
 	{
-		$this->_mailchimp = new MailChimp($this->settings['vl_subscribe_api_key']);
+		$this->_mailchimp = new MailChimp($this->settings['mailchimp_subscribe_api_key']);
 		$result = $this->_mailchimp->call('lists/subscribe',
 			array(
-				'id'                => $this->settings['vl_subscribe_list_id'],
+				'id'                => $this->settings['mailchimp_subscribe_list_id'],
 				'email'             => array(
 					'email' => $user_data['email'],
 				),
@@ -164,7 +164,7 @@ class Vl_subscribe_ext {
 
 		if ($result === FALSE)
 		{
-			$this->_ee->logger->developer("Error adding email {{$user_data['email']}} to list ID {{$this->settings['vl_subscribe_list_id']}} using {{$this->settings['vl_subscribe_api_key']}} as an API key.");
+			$this->_ee->logger->developer("Error adding email {{$user_data['email']}} to list ID {{$this->settings['mailchimp_subscribe_list_id']}} using {{$this->settings['mailchimp_subscribe_api_key']}} as an API key.");
 
 			return false;
 		}

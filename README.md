@@ -1,16 +1,16 @@
-# Mailchimp Subscribe (ExpressionEngine)
+## ExpressionEngine - Mailchimp Subscribe
 Subscribes newly created users to a particular list ID via the Mailchimp API.
 
-## Install
+### Install
 1. Download/clone this repo and save to your `ee-system/third_party/mailchimp_subscribe` directory.
 2. After install, navigate to Add-ons > Extensions and enable Mailchimp Subscribe.
 3. Click on settings and input your Mailchimp API key and List ID
 ![Preview](http://cl.ly/image/400U3c2d0T3H/Screen%20Shot%202014-01-08%20at%2010.34.12%20AM.png)
 
-## Triggering the Subscription
+### Triggering the Subscription
 Mailchimp Subscribe has a trigger field that, when fires, subscribes the user to the specified Mailchimp list ID. The trigger is fired when the form submission of account creation contains an input field name of `email_updates` and a value of `yes`.
 
-## Form Example
+### Form Example
 
 ```html
 <ol class="form__fields">
